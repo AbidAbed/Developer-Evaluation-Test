@@ -3,9 +3,18 @@ import Button from "./Button";
 import Input from "./Input";
 import { useDispatch } from "react-redux";
 import { addTODOItem } from "../Store/StoreInterface";
+import { AiOutlineCopy } from "react-icons/ai";
+import { AiFillCopy } from "react-icons/ai";
 
 function TODOItems({ items, selectedCategory, children, emptyMessage }) {
   const [todoContent, setTodoContent] = useState("");
+
+  const clipboards = items.reduce((prev, curr, index) => {
+    prev[curr.concat(index)] = <AiOutlineCopy />;
+    return prev;
+  }, {});
+
+  const [copyClipBoardIcon, setCopyClipBoardIcon] = useState(clipboards);
 
   const dispatch = useDispatch();
 
@@ -34,6 +43,27 @@ function TODOItems({ items, selectedCategory, children, emptyMessage }) {
   function handleOnChangeTODO(event) {
     setTodoContent(event.target.value);
   }
+
+  const handleCopyClick = async (todoText, index) => {
+    try {
+      await navigator.clipboard.writeText(todoText);
+
+      setCopyClipBoardIcon({
+        ...copyClipBoardIcon,
+        [todoText.concat(index)]: <AiFillCopy />,
+      });
+
+      setTimeout(() => {
+        setCopyClipBoardIcon({
+          ...copyClipBoardIcon,
+          [todoText.concat(index)]: <AiOutlineCopy />,
+        });
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+    }
+  };
+
   return (
     <div className="w-screen h-screen bg-gray-200">
       {children}
@@ -70,11 +100,20 @@ function TODOItems({ items, selectedCategory, children, emptyMessage }) {
             return (
               <div
                 className={
-                  "bg-gray-600 rounded-xl p-2 text-gray-200 w-full p-2 m-1 text-gray-200 "
+                  "flex flex-row bg-gray-600 rounded-xl p-2 text-gray-200 w-full p-2 m-1 text-gray-200 "
                 }
                 key={index}
               >
-                {item}
+                <div className="w-full"> {item} </div>
+                <div className="flex flex-row-reverse">
+                  <Button
+                    className="border rounded-xl p-2 hover:bg-gray-400"
+                    onChange={(event) => {
+                      handleCopyClick(item, index);
+                    }}
+                    icon={copyClipBoardIcon[item.concat(index)]}
+                  />
+                </div>
               </div>
             );
           })
