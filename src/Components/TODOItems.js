@@ -4,7 +4,7 @@ import Input from "./Input";
 import { useDispatch } from "react-redux";
 import { addTODOItem } from "../Store/StoreInterface";
 
-function TODOItems({ items, selectedCategory }) {
+function TODOItems({ items, selectedCategory, children, emptyMessage }) {
   const [todoContent, setTodoContent] = useState("");
 
   const dispatch = useDispatch();
@@ -14,6 +14,7 @@ function TODOItems({ items, selectedCategory }) {
 
   function handleAddTODOItem(event, selectedCategory) {
     event.preventDefault();
+
     let storageCat = JSON.parse(localStorage.getItem("Categories"));
     if (storageCat === null) storageCat = {};
     localStorage.setItem(
@@ -35,14 +36,14 @@ function TODOItems({ items, selectedCategory }) {
   }
   return (
     <div className="w-screen h-screen bg-gray-200">
-      <div className={TODOItemStyle + " pt-2 "}>TODO List</div>
+      {children}
       <div className="flex ">
         <Input
           onChange={(event) => {
             handleOnChangeTODO(event);
           }}
           className={TODOItemStyle + " w-full"}
-          placeholder="TODO Content"
+          placeholder="Add New TODO Content"
           value={todoContent}
         />
         <Button
@@ -54,18 +55,30 @@ function TODOItems({ items, selectedCategory }) {
         />
       </div>
       <div className="pt-10">
-        {items.map((item, index) => {
-          return (
-            <div
-              className={
-                "bg-gray-600 rounded-xl p-2 text-gray-200 w-full p-2 m-1 text-gray-200 "
-              }
-              key={index}
-            >
-              {item}
-            </div>
-          );
-        })}
+        {items.length === 0 ? (
+          emptyMessage ? (
+            <p className="flex place-content-center text-gray-500">
+              {emptyMessage}
+            </p>
+          ) : (
+            <p className="flex place-content-center text-gray-500">
+              This Category Is Empty
+            </p>
+          )
+        ) : (
+          items.map((item, index) => {
+            return (
+              <div
+                className={
+                  "bg-gray-600 rounded-xl p-2 text-gray-200 w-full p-2 m-1 text-gray-200 "
+                }
+                key={index}
+              >
+                {item}
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-import { TODOItemsSlice, addTODOItem } from "./Slices/TODOItemsSlice";
+import {
+  TODOItemsSlice,
+  addTODOItem,
+  addItemsFromStorage,
+} from "./Slices/TODOItemsSlice";
 
 const StoreInterface = configureStore({
   reducer: {
@@ -10,4 +14,4 @@ const StoreInterface = configureStore({
 });
 setupListeners(StoreInterface.dispatch);
 
-export { StoreInterface, addTODOItem };
+export { StoreInterface, addTODOItem, addItemsFromStorage };
