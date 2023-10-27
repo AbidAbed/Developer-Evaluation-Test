@@ -1,5 +1,11 @@
+import TODOPage from "./Pages/TODOPage";
+
 function App() {
-  return <div>hello</div>;
+  return (
+    <div>
+      <TODOPage />
+    </div>
+  );
 }
 
 export default App;
