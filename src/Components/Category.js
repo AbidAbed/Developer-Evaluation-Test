@@ -11,6 +11,8 @@ import { GiConfirmed } from "react-icons/gi";
 import { AiFillDelete } from "react-icons/ai";
 import Input from "./Input";
 
+import { AiOutlinePlusCircle } from "react-icons/ai";
+
 function Category({
   categories,
   onCategoryClick,
@@ -37,7 +39,6 @@ function Category({
 
   // Use the categories prop directly as a dependency
   useEffect(() => {
-    console.log("SEXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     setCategoriesState(categories);
     setRenameCategory({
       ...categories.reduce((prev, curr, index) => {
@@ -110,7 +111,6 @@ function Category({
 
     delete storageCat[category];
 
-
     localStorage.setItem("Categories", JSON.stringify(storageCat));
 
     onCategoryClick("Default");
@@ -118,8 +118,14 @@ function Category({
 
   return (
     /*TODO add responsive width */
-    <div className="sm:w-96 md:w-3/5 lg:w-3/5 xl:w-96 2xl:w-96 h-screen bg-gray-600 overflow-auto">
-      <div className={categoryItemStyle + " pt-2"}>Categories</div>
+    <div className="sm:w-96 md:w-3/5 lg:w-3/5 xl:w-2/5 2xl:w-2/5 h-screen bg-gray-600 overflow-auto">
+      <div
+        className={
+          "border-t-4 border-orange-200 flex place-content-center rounded-xl p-2 m-1 text-orange-100 pt-2"
+        }
+      >
+        Categories
+      </div>
 
       {categoriesState.map((category, index) => {
         return (
@@ -128,7 +134,7 @@ function Category({
               className={
                 "p-2  flex flex-row text-gray-200 hover:text-gray-300 hover:cursor-pointer m-1" +
                 (selectedCategory === category
-                  ? " border-gray-200 border rounded-md font-bold "
+                  ? " border-orange-200 border rounded-md font-bold "
                   : "")
               }
               key={index}
@@ -137,6 +143,7 @@ function Category({
                 onClick={() => {
                   onCategoryClick(category);
                 }}
+                className="w-full"
               >
                 <Input
                   value={
@@ -144,17 +151,18 @@ function Category({
                       ? renameCategory[category.concat(index)].newName
                       : category
                   }
-                  className="p-2 text-gray-200 hover:text-gray-300 hover:cursor-pointer m-1 bg-gray-600 focus:outline-none"
+                  className="break-all p-2 text-gray-200 hover:text-gray-300 hover:cursor-pointer m-1 bg-gray-600 focus:outline-none"
                   onChange={(event) => {
                     handleOnCategoryNameChange(event, category, index);
                   }}
+                  placeholder="Enter Category Name"
                   disabled={!renameCategory[category.concat(index)].rename}
                 />
               </div>
               {category !== "Default" ? (
-                <div className="flex flex-row-reverse">
+                <div className="flex flex-row-reverse ">
                   <Button
-                    className="border rounded-xl p-2 hover:bg-gray-400"
+                    className="border rounded-xl p-2 hover:bg-gray-400 m-1 text-orange-200"
                     onChange={(event) => {
                       handleEditCategoryName(category, index);
                     }}
@@ -162,7 +170,7 @@ function Category({
                   />
                   {categories.length !== 1 ? (
                     <Button
-                      className="border rounded-xl p-2 hover:bg-gray-400"
+                      className="border rounded-xl p-2 hover:bg-gray-400 m-1 text-orange-200"
                       onChange={(event) => {
                         handleDeleteCategory(category, index);
                       }}
@@ -181,7 +189,10 @@ function Category({
           onChange={(event) => {
             handleAddCategory(`New Category ${categoriesState.length}`);
           }}
-          className={"p-2 text-gray-200 hover:text-gray-300"}
+          className={
+            "p-2 text-gray-200 hover:text-gray-300 outline outline-1 outline-orange-200 rounded-md m-4 flex items-center hover:bg-gray-500  text-orange-200"
+          }
+          icon={<AiOutlinePlusCircle />}
         />
       )}
     </div>

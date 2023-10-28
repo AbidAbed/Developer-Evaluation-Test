@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { addTODOItem } from "../Store/StoreInterface";
 import { AiOutlineCopy } from "react-icons/ai";
 import { AiFillCopy } from "react-icons/ai";
+import { BsFillArrowDownCircleFill } from "react-icons/bs";
 
 function TODOItems({
   items,
@@ -88,7 +89,7 @@ function TODOItems({
             onChange={(event) => {
               handleOnChangeTODO(event);
             }}
-            className={TODOItemStyle + " w-full"}
+            className={TODOItemStyle + " w-full outline outline-1"}
             placeholder="Add New TODO Content"
             value={todoContent}
           />
@@ -97,12 +98,13 @@ function TODOItems({
               handleAddTODOItem(event, selectedCategory);
               setTodoContent("");
             }}
-            className={TODOItemStyle + " hover:bg-gray-500 hover:text-gray-200"}
-            text="Submit"
+            className={TODOItemStyle + " flex items-center hover:bg-gray-500  text-orange-200"}
+            text="Submit "
+            icon={<BsFillArrowDownCircleFill />}
           />
         </div>
       )}
-      <div className="pt-10">
+      <div className="pt-10 grid grid-cols-3 grid-rows-3 gap-2 col-span-8 ">
         {items.length === 0 ? (
           emptyMessage ? (
             <p className="flex place-content-center text-gray-500">
@@ -122,10 +124,13 @@ function TODOItems({
                 }
                 key={index}
               >
-                <div className="w-full"> {item} </div>
+                <div className="w-full break-all border-t-4 rounded-md border-orange-200">
+                  {" "}
+                  {item}{" "}
+                </div>
                 <div className="flex flex-row-reverse">
                   <Button
-                    className="border rounded-xl p-2 hover:bg-gray-400"
+                    className="border rounded-xl p-2 hover:bg-gray-400 text-orange-200"
                     onChange={(event) => {
                       handleCopyClick(item, index);
                     }}

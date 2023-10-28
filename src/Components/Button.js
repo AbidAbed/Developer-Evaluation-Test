@@ -1,8 +1,8 @@
 function Button({ onChange, text, icon, className }) {
   return (
     <button onClick={onChange} className={className}>
-      {text}
-      {icon}
+      <div className="p-1"> {text}</div>
+      <div>{icon}</div>
     </button>
   );
 }

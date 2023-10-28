@@ -3,7 +3,7 @@ function Input({ onChange, value, className, placeholder, disabled }) {
     <input
       onChange={onChange}
       value={value}
-      className={className}
+      className={"outline-orange-200 placeholder-orange-100 text-orange-100 " + className}
       placeholder={placeholder}
       readOnly={disabled}
     />

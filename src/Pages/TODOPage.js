@@ -3,6 +3,7 @@ import Category from "../Components/Category";
 import TODOItems from "../Components/TODOItems";
 import { useEffect, useState } from "react";
 import Input from "../Components/Input";
+import { BiSearchAlt } from "react-icons/bi";
 
 function TODOPage() {
   const [categories, allTODOItems] = useSelector((state) => {
@@ -63,7 +64,6 @@ function TODOPage() {
     }
   }, [searchTerm]);
 
-  console.log("@@@", categories, TODOItemsFromStore);
   return (
     <div className="flex flex-intial w-screen h-screen">
       <Category
@@ -84,17 +84,20 @@ function TODOPage() {
         }
       >
         <div className="flex">
-          <div className="bg-gray-600 flex place-content-center rounded-xl m-1 p-2 text-gray-200 pt-2 ">
+          <div className="bg-gray-600 flex place-content-center rounded-md m-1 p-2 font-bold text-orange-100 pt-2">
             Welcome TO TODO List Web App
           </div>
-          <Input
-            onChange={(event) => {
-              handleSearchTermChange(event);
-            }}
-            className="bg-gray-600 flex place-content-center rounded-xl m-1 p-2 text-gray-200 w-full"
-            placeholder="Search TODO Items here"
-            value={searchTerm}
-          />
+          <div className="bg-gray-600 flex place-content-center rounded-xl m-1 p-2 text-gray-200 w-full text-orange-200 items-center">
+            <BiSearchAlt />
+            <Input
+              onChange={(event) => {
+                handleSearchTermChange(event);
+              }}
+              className="bg-gray-600 flex place-content-center rounded-xl m-1 p-2 text-gray-200 w-full outline outline-1"
+              placeholder="Search TODO Items here"
+              value={searchTerm}
+            />
+          </div>
         </div>
       </TODOItems>
     </div>
