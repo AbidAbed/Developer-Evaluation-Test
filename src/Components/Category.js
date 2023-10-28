@@ -1,17 +1,16 @@
 import Button from "./Button";
-import {
-  addCategory,
-  changeCategoryName,
-  removeCategory,
-} from "../Store/StoreInterface";
+import { changeCategoryName, removeCategory } from "../Store/StoreInterface";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { MdDriveFileRenameOutline } from "react-icons/md";
-import { GiConfirmed } from "react-icons/gi";
 import { AiFillDelete } from "react-icons/ai";
 import Input from "./Input";
 
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import useHandleAddCategory from "../Hocks/Category/useHandleAddCategory";
+import useHandleEditCategoryName from "../Hocks/Category/useHandleEditCategoryName";
+import useHandleOnCategoryNameChange from "../Hocks/Category/useHandleOnCategoryNameChange";
+import useHandleDeleteCategory from "../Hocks/Category/useHandleDeleteCategory";
 
 function Category({
   categories,
@@ -22,9 +21,6 @@ function Category({
   const dispatch = useDispatch();
 
   const [categoriesState, setCategoriesState] = useState(categories);
-
-  const categoryItemStyle =
-    "bg-gray-200 flex place-content-center rounded-xl p-2 m-1 text-gray-600";
 
   const [renameCategory, setRenameCategory] = useState({
     ...categories.reduce((prev, curr, index) => {
@@ -52,69 +48,25 @@ function Category({
     });
   }, [categories, dispatch]);
 
-  function handleAddCategory(category) {
-    dispatch(addCategory(category));
+  const handleAddCategory = useHandleAddCategory(dispatch);
 
-    const storageCat = JSON.parse(localStorage.getItem("Categories"));
+  const handleEditCategoryName = useHandleEditCategoryName(
+    renameCategory,
+    setRenameCategory,
+    dispatch,
+    changeCategoryName,
+    onCategoryClick
+  );
 
-    localStorage.setItem(
-      "Categories",
-      JSON.stringify({ ...storageCat, [category]: [] })
-    );
-  }
+  const handleOnCategoryNameChange = useHandleOnCategoryNameChange(
+    setRenameCategory,
+    renameCategory
+  );
 
-  function handleEditCategoryName(category, index) {
-    if (!renameCategory[category.concat(index)].rename) {
-      setRenameCategory({
-        ...renameCategory,
-        [category.concat(index)]: {
-          rename: true,
-          newName: "",
-          icon: <GiConfirmed />,
-        },
-      });
-    } else {
-      dispatch(
-        changeCategoryName({
-          ogName: category,
-          newName: renameCategory[category.concat(index)].newName,
-        })
-      );
-
-      const storageCat = JSON.parse(localStorage.getItem("Categories"));
-
-      storageCat[renameCategory[category.concat(index)].newName] =
-        storageCat[category];
-
-      delete storageCat[category];
-
-      localStorage.setItem("Categories", JSON.stringify(storageCat));
-
-      onCategoryClick("Default");
-    }
-  }
-
-  function handleOnCategoryNameChange(event, category, index) {
-    setRenameCategory({
-      ...renameCategory,
-      [category.concat(index)]: {
-        ...renameCategory[category.concat(index)],
-        newName: event.target.value,
-      },
-    });
-  }
-
-  function handleDeleteCategory(category, index) {
-    dispatch(removeCategory(category));
-
-    const storageCat = JSON.parse(localStorage.getItem("Categories"));
-
-    delete storageCat[category];
-
-    localStorage.setItem("Categories", JSON.stringify(storageCat));
-
-    onCategoryClick("Default");
-  }
+  const handleDeleteCategory = useHandleDeleteCategory(
+    dispatch,
+    onCategoryClick
+  );
 
   return (
     /*TODO add responsive width */
