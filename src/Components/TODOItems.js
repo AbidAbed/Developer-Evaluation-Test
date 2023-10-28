@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./Button";
 import Input from "./Input";
 import { useDispatch } from "react-redux";
@@ -6,7 +6,13 @@ import { addTODOItem } from "../Store/StoreInterface";
 import { AiOutlineCopy } from "react-icons/ai";
 import { AiFillCopy } from "react-icons/ai";
 
-function TODOItems({ items, selectedCategory, children, emptyMessage }) {
+function TODOItems({
+  items,
+  selectedCategory,
+  children,
+  emptyMessage,
+  searchMode,
+}) {
   const [todoContent, setTodoContent] = useState("");
 
   const clipboards = items.reduce((prev, curr, index) => {
@@ -15,6 +21,15 @@ function TODOItems({ items, selectedCategory, children, emptyMessage }) {
   }, {});
 
   const [copyClipBoardIcon, setCopyClipBoardIcon] = useState(clipboards);
+
+  useEffect(() => {
+    setCopyClipBoardIcon(
+      items.reduce((prev, curr, index) => {
+        prev[curr.concat(index)] = <AiOutlineCopy />;
+        return prev;
+      }, {})
+    );
+  }, [items]);
 
   const dispatch = useDispatch();
 
@@ -67,23 +82,26 @@ function TODOItems({ items, selectedCategory, children, emptyMessage }) {
   return (
     <div className="w-screen h-screen bg-gray-200">
       {children}
-      <div className="flex ">
-        <Input
-          onChange={(event) => {
-            handleOnChangeTODO(event);
-          }}
-          className={TODOItemStyle + " w-full"}
-          placeholder="Add New TODO Content"
-          value={todoContent}
-        />
-        <Button
-          onChange={(event) => {
-            handleAddTODOItem(event, selectedCategory);
-          }}
-          className={TODOItemStyle + " hover:bg-gray-500 hover:text-gray-200"}
-          text="Submit"
-        />
-      </div>
+      {searchMode ? null : (
+        <div className="flex ">
+          <Input
+            onChange={(event) => {
+              handleOnChangeTODO(event);
+            }}
+            className={TODOItemStyle + " w-full"}
+            placeholder="Add New TODO Content"
+            value={todoContent}
+          />
+          <Button
+            onChange={(event) => {
+              handleAddTODOItem(event, selectedCategory);
+              setTodoContent("");
+            }}
+            className={TODOItemStyle + " hover:bg-gray-500 hover:text-gray-200"}
+            text="Submit"
+          />
+        </div>
+      )}
       <div className="pt-10">
         {items.length === 0 ? (
           emptyMessage ? (

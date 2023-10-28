@@ -7,6 +7,11 @@ function App() {
 
   const storageData = JSON.parse(localStorage.getItem("Categories"));
   if (storageData !== null) dispatch(addItemsFromStorage(storageData));
+  else {
+    localStorage.setItem("Categories", JSON.stringify({ Default: [] }));
+    const storageData = JSON.parse(localStorage.getItem("Categories"));
+    dispatch(addItemsFromStorage(storageData));
+  }
 
   return (
     <div>

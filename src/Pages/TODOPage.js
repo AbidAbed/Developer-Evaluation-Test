@@ -63,9 +63,11 @@ function TODOPage() {
     }
   }, [searchTerm]);
 
+  console.log("@@@", categories, TODOItemsFromStore);
   return (
     <div className="flex flex-intial w-screen h-screen">
       <Category
+        searchMode={searchTerm.length !== 0 ? true : false}
         categories={searchTerm.length !== 0 ? searchCategories : categories}
         onCategoryClick={onCategoryClick}
         selectedCategory={selectedCategory}
@@ -74,6 +76,7 @@ function TODOPage() {
         }
       />
       <TODOItems
+        searchMode={searchTerm.length !== 0 ? true : false}
         items={searchTerm.length !== 0 ? searchItems : TODOItemsFromStore}
         selectedCategory={selectedCategory}
         emptyMessage={

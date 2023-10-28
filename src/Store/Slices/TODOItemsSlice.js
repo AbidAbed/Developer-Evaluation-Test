@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const TODOItemsSlice = createSlice({
   name: "TODOItems",
-  initialState: { Default: [], Anime: [] },
+  initialState: {},
   reducers: {
     addTODOItem(state, action) {
       const newTODOItems = {
@@ -15,10 +15,29 @@ const TODOItemsSlice = createSlice({
       return newTODOItems;
     },
     addItemsFromStorage(state, action) {
-      return { ...action.payload };
+      state = { ...action.payload };
+      return state;
+    },
+    addCategory(state, action) {
+      return { ...state, [action.payload]: [] };
+    },
+    removeCategory(state, action) {
+      delete state[action.payload];
+    },
+    changeCategoryName(state, action) {
+      state[action.payload.newName] = [...state[action.payload.ogName]];
+      delete state[action.payload.ogName];
+
+      return state;
     },
   },
 });
 
 export { TODOItemsSlice };
-export const { addTODOItem, addItemsFromStorage } = TODOItemsSlice.actions;
+export const {
+  addTODOItem,
+  addItemsFromStorage,
+  addCategory,
+  removeCategory,
+  changeCategoryName,
+} = TODOItemsSlice.actions;

@@ -4,6 +4,9 @@ import {
   TODOItemsSlice,
   addTODOItem,
   addItemsFromStorage,
+  addCategory,
+  removeCategory,
+  changeCategoryName,
 } from "./Slices/TODOItemsSlice";
 
 const StoreInterface = configureStore({
@@ -14,4 +17,11 @@ const StoreInterface = configureStore({
 });
 setupListeners(StoreInterface.dispatch);
 
-export { StoreInterface, addTODOItem, addItemsFromStorage };
+export {
+  StoreInterface,
+  addTODOItem,
+  addItemsFromStorage,
+  addCategory,
+  removeCategory,
+  changeCategoryName,
+};
