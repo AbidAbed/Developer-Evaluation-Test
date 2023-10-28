@@ -37,7 +37,6 @@ function Category({
 
   // Use the categories prop directly as a dependency
   useEffect(() => {
-    console.log("SEXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     setCategoriesState(categories);
     setRenameCategory({
       ...categories.reduce((prev, curr, index) => {
