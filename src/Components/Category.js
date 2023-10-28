@@ -110,7 +110,6 @@ function Category({
 
     delete storageCat[category];
 
-    setCategoriesState([...Object.keys(storageCat)]);
 
     localStorage.setItem("Categories", JSON.stringify(storageCat));
 
@@ -119,7 +118,7 @@ function Category({
 
   return (
     /*TODO add responsive width */
-    <div className="w-1/3 h-screen bg-gray-600">
+    <div className="sm:w-96 md:w-3/5 lg:w-3/5 xl:w-96 2xl:w-96 h-screen bg-gray-600 overflow-auto">
       <div className={categoryItemStyle + " pt-2"}>Categories</div>
 
       {categoriesState.map((category, index) => {
