@@ -4,8 +4,9 @@ import Input from "./Input";
 import { useDispatch } from "react-redux";
 import { addTODOItem } from "../Store/StoreInterface";
 import { AiOutlineCopy } from "react-icons/ai";
-import { AiFillCopy } from "react-icons/ai";
 import { BsFillArrowDownCircleFill } from "react-icons/bs";
+import useHandleAddTODOItem from "../Hocks/TODOItems/useHandleAddTODOItem";
+import useHandleCopyClick from "../Hocks/TODOItems/useHandleCopyClick";
 
 function TODOItems({
   items,
@@ -37,48 +38,20 @@ function TODOItems({
   const TODOItemStyle =
     "bg-gray-600 flex place-content-center rounded-xl m-1 p-2 text-gray-200";
 
-  function handleAddTODOItem(event, selectedCategory) {
-    event.preventDefault();
-
-    let storageCat = JSON.parse(localStorage.getItem("Categories"));
-    if (storageCat === null) storageCat = {};
-    localStorage.setItem(
-      "Categories",
-      JSON.stringify({
-        ...storageCat,
-        [selectedCategory]: storageCat.hasOwnProperty(selectedCategory)
-          ? [...storageCat[selectedCategory], todoContent]
-          : [todoContent],
-      })
-    );
-    dispatch(
-      addTODOItem({ category: selectedCategory, TODOContent: todoContent })
-    );
-  }
+  const handleAddTODOItem = useHandleAddTODOItem(
+    dispatch,
+    todoContent,
+    addTODOItem
+  );
 
   function handleOnChangeTODO(event) {
     setTodoContent(event.target.value);
   }
 
-  const handleCopyClick = async (todoText, index) => {
-    try {
-      await navigator.clipboard.writeText(todoText);
-
-      setCopyClipBoardIcon({
-        ...copyClipBoardIcon,
-        [todoText.concat(index)]: <AiFillCopy />,
-      });
-
-      setTimeout(() => {
-        setCopyClipBoardIcon({
-          ...copyClipBoardIcon,
-          [todoText.concat(index)]: <AiOutlineCopy />,
-        });
-      }, 2000);
-    } catch (err) {
-      console.error("Failed to copy text: ", err);
-    }
-  };
+  const handleCopyClick = useHandleCopyClick(
+    setCopyClipBoardIcon,
+    copyClipBoardIcon
+  );
 
   return (
     <div className="w-screen h-screen bg-gray-200">
@@ -98,7 +71,10 @@ function TODOItems({
               handleAddTODOItem(event, selectedCategory);
               setTodoContent("");
             }}
-            className={TODOItemStyle + " flex items-center hover:bg-gray-500  text-orange-200"}
+            className={
+              TODOItemStyle +
+              " flex items-center hover:bg-gray-500  text-orange-200"
+            }
             text="Submit "
             icon={<BsFillArrowDownCircleFill />}
           />
